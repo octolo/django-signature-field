@@ -1,0 +1,192 @@
+.signature-widget {
+    max-width: 100%;
+}
+
+.signature-widget [hidden] {
+    display: none !important;
+}
+
+.signature-widget.is-initial-mode {
+    display: inline-block;
+}
+
+.signature-widget.is-initial-mode .sw-signature {
+    width: fit-content;
+}
+
+.sw-signature {
+    position: relative;
+    border: 1px dashed #bbb;
+    background: #f4f4f4;
+    touch-action: none;
+    container-type: inline-size;
+    container-name: sw-signature;
+}
+
+.signature-widget.has-fixed-size {
+    max-width: none;
+    width: fit-content;
+}
+
+.signature-widget.is-initial-mode.has-fixed-size {
+    display: inline-block;
+}
+
+.signature-widget.is-initial-mode.has-fixed-size .sw-signature {
+    width: auto;
+}
+
+.sw-signature.is-locked {
+    opacity: 0.85;
+}
+
+.sw-signature.is-locked canvas {
+    cursor: default;
+}
+
+.sw-signature.is-drawing .sw-actions {
+    pointer-events: none;
+}
+
+.sw-signature canvas {
+    display: block;
+    cursor: crosshair;
+}
+
+.signature-widget:not(.has-fixed-size) .sw-signature canvas {
+    width: 100%;
+}
+
+.signature-widget.has-fixed-size .sw-signature canvas {
+    max-width: none;
+}
+
+.sw-download {
+    margin: 0.35rem 0 0;
+    font-size: 0.9rem;
+}
+
+.sw-download a {
+    color: #1976d2;
+    text-decoration: none;
+}
+
+.sw-download a:hover {
+    text-decoration: underline;
+}
+
+.sw-actions {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    z-index: 1;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 4px;
+}
+
+.sw-actions-right {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    flex: 0 0 auto;
+    margin-left: auto;
+}
+
+.sw-font-picker {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    flex: 0 1 auto;
+    max-width: calc(100% - 3.5rem);
+}
+
+.sw-font-label {
+    font-size: 0.85rem;
+    color: #444;
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sw-font-prev,
+.sw-font-next {
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #666;
+    padding: 2px 4px;
+}
+
+.sw-font-prev:disabled,
+.sw-font-next:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.sw-text-edit,
+.sw-clear {
+    border: none;
+    background: transparent;
+    line-height: 1;
+    cursor: pointer;
+    color: #666;
+    padding: 0 4px;
+}
+
+.sw-text-edit {
+    font-size: 1.75rem;
+}
+
+.sw-clear {
+    font-size: 1.4rem;
+}
+
+.sw-limit {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    z-index: 1;
+    font-size: 0.75rem;
+    line-height: 1;
+    color: #666;
+    pointer-events: none;
+    user-select: none;
+}
+
+.sw-button {
+    border: 1px solid #ccc;
+    background: #f5f5f5;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sw-button.sw-cancel {
+    border-color: #c62828;
+    background: #ffebee;
+}
+
+.sw-signed {
+    color: #2e7d32;
+    font-weight: 600;
+}
+
+@container sw-signature (max-width: 280px) {
+    .sw-font-prev,
+    .sw-font-label {
+        display: none !important;
+    }
+
+    .sw-font-picker {
+        max-width: none;
+        flex: 0 0 auto;
+    }
+}

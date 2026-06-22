@@ -1,0 +1,59 @@
+{% load i18n static %}
+<div class="signature-widget{% if widget.initial_mode %} is-initial-mode{% endif %}"
+     data-signature-widget
+     data-config="{{ widget.config_json }}">
+    {% if widget.fonts %}
+    <style>
+        {% for font in widget.fonts %}
+        @font-face {
+            font-family: "{{ font.family }}";
+            src: url("{{ font.url }}") format("woff2");
+            font-display: swap;
+        }
+        {% endfor %}
+    </style>
+    {% endif %}
+    <input type="hidden"
+           name="{{ widget.name }}"
+           {% if widget.value != None %}value="{{ widget.value }}"{% endif %}
+           {% include "django/forms/widgets/attrs.html" %}
+           data-signature-input>
+    <input type="hidden"
+           name="{{ widget.drawn_name }}"
+           value="{{ widget.drawn_value }}"
+           data-signature-drawn>
+    <div class="sw-signature" data-sw-signature>
+        <div class="sw-actions">
+            <div class="sw-font-picker" data-sw-font-picker {% if not widget.fonts %}hidden{% endif %}>
+                <button type="button" class="sw-font-prev" data-sw-font-prev aria-label="{% trans 'Previous font' %}">&#9664;</button>
+                <span class="sw-font-label" data-sw-font-label></span>
+                <button type="button" class="sw-font-next" data-sw-font-next aria-label="{% trans 'Next font' %}">&#9654;</button>
+            </div>
+            <div class="sw-actions-right">
+                <button type="button"
+                        class="sw-text-edit"
+                        data-sw-text-edit
+                        data-prompt-label="{% if widget.initial_mode %}{% trans 'Initials' %}{% else %}{% trans 'Signature text' %}{% endif %}"
+                        aria-label="{% trans 'Edit text' %}">&#9000;</button>
+                <button type="button"
+                        class="sw-clear"
+                        data-sw-clear
+                        hidden
+                        data-clear-label="{% trans 'Clear' %}"
+                        data-remove-label="{% trans 'Remove signature' %}"
+                        aria-label="{% trans 'Clear' %}">&times;</button>
+            </div>
+        </div>
+        <canvas data-sw-canvas></canvas>
+        {% if widget.max_chars %}
+        <div class="sw-limit" data-sw-limit>
+            <span class="sw-limit-value">{{ widget.max_chars }}</span>
+        </div>
+        {% endif %}
+    </div>
+    {% if widget.show_download_link %}
+    <p class="sw-download">
+        <a href="{{ widget.download_url }}" download>{% trans "Download image" %}</a>
+    </p>
+    {% endif %}
+</div>
