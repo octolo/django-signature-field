@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Signature field &mdash; standalone (no Django)</title>
+
+    <!--
+      Pure static usage: no backend, no Django.
+      Paths point at the bundled package static files.
+    -->
+    <link rel="stylesheet" href="../src/signature/static/signature/css/signature_widget.css">
+    <link rel="stylesheet" href="../src/signature/static/signature/css/signature_fonts.css">
+
+    <style>
+        body { font-family: sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+        h1 { font-size: 1.3rem; }
+        .field { margin: 1.5rem 0; }
+        .field > label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
+        pre { background: #f5f5f5; padding: 0.75rem; border-radius: 4px; overflow: auto; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <h1>Signature field without a backend</h1>
+    <p>The widget below is built entirely in JavaScript from a config object.</p>
+
+    <div class="field">
+        <label>Signature</label>
+        <div id="signature-host"></div>
+    </div>
+
+    <div class="field">
+        <label>Initials</label>
+        <div id="initials-host"></div>
+    </div>
+
+    <p><button type="button" id="dump">Show current values</button></p>
+    <pre id="output">(nothing yet)</pre>
+
+    <script src="../src/signature/static/signature/js/signature_widget.js"></script>
+    <script>
+        const fonts = [
+            { id: "royalty-free", label: "Royalty Free", family: "SignatureRoyaltyFree" },
+            { id: "great-vibes-regular", label: "Great Vibes", family: "SignatureGreatVibesRegular" },
+            { id: "allura-regular", label: "Allura", family: "SignatureAlluraRegular" },
+        ];
+
+        const signature = SignatureField.create(
+            document.getElementById("signature-host"),
+            {
+                name: "signature",
+                signerName: "Jane Doe",
+                fonts: fonts,
+                defaultFont: "royalty-free",
+                allowRedraw: true,
+                manage: true,
+                canvasWidth: 360,
+                canvasHeight: 180,
+            }
+        );
+
+        const initials = SignatureField.create(
+            document.getElementById("initials-host"),
+            {
+                name: "initials",
+                text: "JD",
+                fonts: fonts,
+                defaultFont: "royalty-free",
+                allowRedraw: true,
+                manage: true,
+                initialMode: true,
+                maxChars: 3,
+            }
+        );
+
+        document.getElementById("dump").addEventListener("click", () => {
+            document.getElementById("output").textContent = JSON.stringify(
+                {
+                    signature: signature.input.value.slice(0, 64) + "...",
+                    initials: initials.input.value.slice(0, 64) + "...",
+                },
+                null,
+                2
+            );
+        });
+    </script>
+</body>
+</html>

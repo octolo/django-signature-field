@@ -45,6 +45,16 @@ class DemoPageTests(SimpleTestCase):
         assert "320x160" in content
         assert "100x100" in content
 
+    def test_standalone_page_has_no_backend_widgets(self) -> None:
+        response = Client().get("/standalone/")
+        assert response.status_code == 200
+        content = response.content.decode()
+        assert "Signature without backend data" in content
+        assert "SignatureField.create" in content
+        assert "signature/js/signature_widget.js" in content
+        assert "signature/css/signature_fonts.css" in content
+        assert content.count("data-signature-widget") == 0
+
     def test_document_list_page(self) -> None:
         response = Client().get("/documents/")
         assert response.status_code == 200

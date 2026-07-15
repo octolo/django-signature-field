@@ -17,9 +17,52 @@
         };
     }
 
+    function escapeAttr(value) {
+        return String(value == null ? "" : value)
+            .replace(/&/g, "&amp;")
+            .replace(/"/g, "&quot;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    }
+
+    function buildWidgetMarkup(config) {
+        const labels = config.labels || {};
+        const name = config.name || "signature";
+        const promptLabel = config.initialMode
+            ? (labels.initials || "Initials")
+            : (labels.signatureText || "Signature text");
+        const limit = config.maxChars
+            ? `<div class="sw-limit" data-sw-limit><span class="sw-limit-value">${escapeAttr(config.maxChars)}</span></div>`
+            : "";
+        return `
+<input type="hidden" name="${escapeAttr(name)}" data-signature-input>
+<input type="hidden" name="${escapeAttr(name)}__drawn" value="0" data-signature-drawn>
+<div class="sw-signature" data-sw-signature>
+    <div class="sw-actions">
+        <div class="sw-font-picker" data-sw-font-picker>
+            <button type="button" class="sw-font-prev" data-sw-font-prev aria-label="${escapeAttr(labels.previousFont || "Previous font")}">\u25C0</button>
+            <span class="sw-font-label" data-sw-font-label></span>
+            <button type="button" class="sw-font-next" data-sw-font-next aria-label="${escapeAttr(labels.nextFont || "Next font")}">\u25B6</button>
+        </div>
+        <div class="sw-actions-right">
+            <button type="button" class="sw-text-edit" data-sw-text-edit data-prompt-label="${escapeAttr(promptLabel)}" aria-label="${escapeAttr(labels.editText || "Edit text")}">\u2328</button>
+            <button type="button" class="sw-clear" data-sw-clear hidden data-clear-label="${escapeAttr(labels.clear || "Clear")}" data-remove-label="${escapeAttr(labels.remove || "Remove signature")}" aria-label="${escapeAttr(labels.clear || "Clear")}">\u00D7</button>
+        </div>
+    </div>
+    <canvas data-sw-canvas></canvas>
+    ${limit}
+</div>`;
+    }
+
     class SignaturePad {
         constructor(root) {
             this.root = root;
+            this.config = JSON.parse(root.dataset.config || "{}");
+
+            if (!root.querySelector("[data-sw-canvas]")) {
+                root.innerHTML = buildWidgetMarkup(this.config);
+            }
+
             this.input = root.querySelector("[data-signature-input]");
             this.drawnInput = root.querySelector("[data-signature-drawn]");
             this.canvas = root.querySelector("[data-sw-canvas]");
@@ -32,7 +75,10 @@
             this.limitIndicator = root.querySelector("[data-sw-limit]");
             this.signatureBox = root.querySelector("[data-sw-signature]");
 
-            this.config = JSON.parse(root.dataset.config || "{}");
+            if (!this.input.value && this.config.value) {
+                this.input.value = this.config.value;
+            }
+
             this.fonts = this.config.fonts || [];
             this.fontIndex = 0;
             this.textValue = this.config.text || this.config.signerName || "";
@@ -656,6 +702,17 @@
         });
     }
 
+    function createSignatureField(container, config) {
+        const root = document.createElement("div");
+        const settings = config || {};
+        root.className = "signature-widget" + (settings.initialMode ? " is-initial-mode" : "");
+        root.setAttribute("data-signature-widget", "");
+        root.dataset.config = JSON.stringify(settings);
+        container.appendChild(root);
+        root.signaturePad = new SignaturePad(root);
+        return root.signaturePad;
+    }
+
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", initSignatureWidgets);
     } else {
@@ -663,4 +720,10 @@
     }
 
     window.initSignatureWidgets = initSignatureWidgets;
+    window.SignatureField = {
+        SignaturePad,
+        create: createSignatureField,
+        init: initSignatureWidgets,
+        buildMarkup: buildWidgetMarkup,
+    };
 })();

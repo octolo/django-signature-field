@@ -9,6 +9,7 @@ from tests.app.views import (
     demo_home,
     demo_playground,
     demo_playground_no_redraw,
+    demo_standalone,
     document_edit,
     document_list,
     document_no_redraw_edit,
@@ -16,6 +17,7 @@ from tests.app.views import (
 
 urlpatterns = [
     path("", demo_home, name="signature-home"),
+    path("standalone/", demo_standalone, name="signature-standalone"),
     path("documents/", document_list, name="signature-documents"),
     path("documents/<int:pk>/edit/", document_edit, name="signature-document-edit"),
     path(

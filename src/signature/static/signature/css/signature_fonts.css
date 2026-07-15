@@ -1,0 +1,36 @@
+/*
+ * Standalone @font-face declarations for the bundled signature fonts.
+ * Paths are relative to this file so it works with or without Django.
+ * The Django widget generates these declarations dynamically instead,
+ * to support fonts configured via SIGNATURE_FONTS.
+ */
+@font-face {
+    font-family: "SignatureAlluraRegular";
+    src: url("../fonts/Allura-Regular.woff2") format("woff2");
+    font-display: swap;
+}
+@font-face {
+    font-family: "SignatureChopinScript";
+    src: url("../fonts/ChopinScript.woff2") format("woff2");
+    font-display: swap;
+}
+@font-face {
+    font-family: "SignatureCivilManuscript";
+    src: url("../fonts/Civil%20Manuscript.woff2") format("woff2");
+    font-display: swap;
+}
+@font-face {
+    font-family: "SignatureGreatVibesRegular";
+    src: url("../fonts/GreatVibes-Regular.woff2") format("woff2");
+    font-display: swap;
+}
+@font-face {
+    font-family: "SignaturePinyonScriptRegular";
+    src: url("../fonts/PinyonScript-Regular.woff2") format("woff2");
+    font-display: swap;
+}
+@font-face {
+    font-family: "SignatureRoyaltyFree";
+    src: url("../fonts/Royalty-Free.woff2") format("woff2");
+    font-display: swap;
+}

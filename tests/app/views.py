@@ -241,6 +241,29 @@ def document_no_redraw_edit(request, pk: int):
     )
 
 
+def demo_standalone(request):
+    """Render the widget with no model, form, or backend data.
+
+    Proves the field can be built purely client-side from a config object,
+    which is what enables reuse outside Django. Sizes come from the URL only
+    so the template can forward them to the JS config.
+    """
+    signature_size = parse_size(request.GET.get("signature"), DEFAULT_SIGNATURE_SIZE)
+    initials_size = parse_initials_size(request.GET.get("initials"), DEFAULT_INITIALS_SIZE)
+    return render(
+        request,
+        "tests/standalone.html",
+        {
+            "signature_width": signature_size[0],
+            "signature_height": signature_size[1],
+            "initials_width": initials_size[0],
+            "initials_height": initials_size[1],
+            "signature_param": size_param(signature_size),
+            "initials_param": size_param(initials_size),
+        },
+    )
+
+
 def demo_home(request):
     presets = []
     for preset in DEMO_PRESETS:
@@ -252,6 +275,10 @@ def demo_home(request):
                 ),
                 "locked_url": (
                     f"/play/locked/?signature={preset['signature']}"
+                    f"&initials={preset['initials']}"
+                ),
+                "standalone_url": (
+                    f"/standalone/?signature={preset['signature']}"
                     f"&initials={preset['initials']}"
                 ),
             }
