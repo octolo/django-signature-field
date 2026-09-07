@@ -3,7 +3,7 @@
 import base64
 
 import pytest
-from django.test import Client, SimpleTestCase
+from django.test import Client, TestCase
 
 from tests.app.models import SignedDocument, SignedDocumentNoRedraw
 
@@ -16,7 +16,7 @@ MINIMAL_PNG_DATA_URL = (
 )
 
 
-class DemoPageTests(SimpleTestCase):
+class DemoPageTests(TestCase):
     def test_home_page_lists_presets(self) -> None:
         response = Client().get("/")
         assert response.status_code == 200
@@ -69,7 +69,7 @@ class DemoPageTests(SimpleTestCase):
         assert response.status_code == 200
         content = response.content.decode()
         assert "Playground (no redraw)" in content
-        assert '"allowRedraw": false' in content
+        assert "&quot;allowRedraw&quot;: false" in content
         assert content.count("data-signature-widget") == 4
 
 
@@ -94,6 +94,7 @@ def test_document_edit_page() -> None:
     assert content.count("data-signature-widget") == 4
 
 
+@pytest.mark.django_db
 def test_document_edit_not_found() -> None:
     response = Client().get("/documents/999/edit/")
     assert response.status_code == 404
@@ -106,7 +107,7 @@ def test_document_no_redraw_edit_page() -> None:
     content = response.content.decode()
     assert response.status_code == 200
     assert "Locked contract" in content
-    assert '"allowRedraw": false' in content
+    assert "&quot;allowRedraw&quot;: false" in content
 
 
 @pytest.mark.django_db
