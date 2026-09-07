@@ -239,6 +239,45 @@ def test_staff_user_can_clear_locked_signature_to_empty() -> None:
 
 
 @pytest.mark.django_db
+def test_staff_user_can_clear_redrawable_signature_to_empty() -> None:
+    from django.contrib.auth import get_user_model
+
+    user_model = get_user_model()
+    staff = user_model.objects.create_user(
+        "staff-redraw-clear",
+        "staff-redraw-clear@example.com",
+        "staff-redraw-clear",
+        is_staff=True,
+    )
+    document = SignedDocument.objects.create(
+        title="Redrawable",
+        signature=MINIMAL_PNG_DATA_URL,
+    )
+
+    class DocumentForm(SignatureModelForm):
+        class Meta:
+            model = SignedDocument
+            fields = ["title", "signature"]
+
+    form = DocumentForm(instance=document, signature_user=staff)
+    assert form.fields["signature"].widget.manage is True
+
+    form = DocumentForm(
+        {
+            "title": "Redrawable",
+            "signature": "",
+            signature_redrawn_field_name("signature"): "1",
+        },
+        instance=document,
+        signature_user=staff,
+    )
+    assert form.is_valid(), form.errors
+    saved = form.save()
+    saved.refresh_from_db()
+    assert saved.signature is None
+
+
+@pytest.mark.django_db
 def test_staff_image_field_shows_download_link() -> None:
     from django.contrib.auth import get_user_model
     from django.core.files.uploadedfile import SimpleUploadedFile

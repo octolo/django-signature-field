@@ -128,7 +128,7 @@ def test_admin_lists_documents() -> None:
     content = add_page.content.decode()
     assert add_page.status_code == 200
     assert content.count("data-signature-widget") == 4
-    assert "&quot;manage&quot;: false" in content
+    assert "&quot;manage&quot;: true" in content
 
 
 @pytest.mark.django_db

@@ -29,6 +29,8 @@ def apply_signature_staff_access(form: forms.BaseForm) -> None:
         widget = field.widget
         if isinstance(widget, SignatureWidget):
             widget.staff_mode = True
+            if field.allow_staff_redraw:
+                widget.manage = True
             if (
                 widget.field_type == "image"
                 and instance is not None

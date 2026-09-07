@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "django-signature-field"
-version = "0.1.0"
+version = "0.1.1"
 description = "Django field for storing canvas signatures as blob or image"
 readme = "README.md"
 authors = [{ name = "Octolo", email = "dev@octolo.tech" }]

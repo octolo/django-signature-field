@@ -401,10 +401,13 @@
             );
             const height = Math.max(this.config.canvasMinHeight || 200, 200);
             this.setCanvasSize(width, height);
-            if (this.getTypedText()) {
-                this.renderTypedText();
-            } else if (previous) {
+            // Prefer a stored drawing over the typed signer name. Resize
+            // fires when a modal becomes visible; overwriting the image
+            // with generated text would hide an existing signature.
+            if (previous) {
                 this.loadImage(previous);
+            } else if (this.getTypedText()) {
+                this.renderTypedText();
             } else {
                 this.refreshComposite();
             }

@@ -2,6 +2,14 @@
     max-width: 100%;
 }
 
+.signature-widget:not(.is-initial-mode):not(.has-fixed-size) {
+    min-width: min(100%, 32rem);
+}
+
+.signature-widget:not(.is-initial-mode) .sw-signature {
+    min-height: 12rem;
+}
+
 .signature-widget [hidden] {
     display: none !important;
 }
