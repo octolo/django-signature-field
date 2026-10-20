@@ -7,6 +7,7 @@ from typing import Any
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.formats import date_format
 from django.utils.timezone import is_aware, localtime, make_aware, now
+from django.utils.translation import gettext as _
 
 
 def format_signature_timestamp(when: datetime | None = None) -> str:
@@ -14,7 +15,8 @@ def format_signature_timestamp(when: datetime | None = None) -> str:
     when = when or now()
     if not is_aware(when):
         when = make_aware(when)
-    return f"Signed: {date_format(localtime(when), 'SHORT_DATETIME_FORMAT')}"
+    formatted_date = date_format(localtime(when), 'SHORT_DATETIME_FORMAT')
+    return _('Signed: %(date)s') % {'date': formatted_date}
 
 
 def apply_signature_timestamp(png_bytes: bytes, when: datetime | None = None) -> bytes:
