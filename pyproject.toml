@@ -65,7 +65,7 @@ include = ["signature*"]
 exclude = ["tests*"]
 
 [tool.setuptools.package-data]
-signature = ["templates/**/*", "static/**/*"]
+signature = ["templates/**/*", "static/**/*", "locale/**/*"]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.settings"
@@ -85,4 +85,3 @@ django_settings_module = "tests.settings"
 [tool.ruff]
 line-length = 100
 target-version = "py310"
-
